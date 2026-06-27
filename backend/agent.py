@@ -57,12 +57,16 @@ async def entrypoint(ctx: JobContext) -> None:
     monitor = MonitorPublisher(ctx.room)
     agent = BookingAgent(monitor)
 
+    # NOTE: turn_detection via the multilingual model runs in a separate
+    # inference process that can hang on some Windows setups and stall the
+    # connection. We rely on Silero VAD for end-of-turn detection instead,
+    # which is reliable and starts instantly. To re-enable the smarter model,
+    # add: turn_detection=providers.build_turn_detection()
     session = AgentSession(
         stt=providers.build_stt(),
         llm=providers.build_llm(),
         tts=providers.build_tts(),
         vad=ctx.proc.userdata.get("vad") or providers.build_vad(),
-        turn_detection=providers.build_turn_detection(),
     )
 
     # ---- monitoring: agent state ------------------------------------
