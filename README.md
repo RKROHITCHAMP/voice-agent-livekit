@@ -33,7 +33,7 @@ frontend, and **Twilio** SIP for telephony.
   (caller)  ◀───┼──▶│  Caller    │◀────────────────▶│   Agent A (Python worker) │    │
   /call         │   │  track     │                  │   AgentSession            │    │
                 │   └────────────┘                  │   • Deepgram STT          │    │
-                │                                    │   • OpenAI LLM + tools    │    │
+                │                                    │   • Groq/OpenAI LLM+tools │    │
                 │   ┌────────────┐  data: "monitor"  │   • Deepgram TTS          │    │
   Browser   ◀───┼──▶│  Monitor   │◀──────────────────│   • Silero VAD            │    │
   (watcher)     │   │  (no mic   │  data: "control"  │                           │    │
@@ -230,4 +230,13 @@ in the codebase imports a provider directly.
   access and the page must be served over `localhost`/HTTPS.
 - **Transfer fails immediately** — `SIP_OUTBOUND_TRUNK_ID` /
   `HUMAN_AGENT_NUMBER` not set, or SIP REFER/PSTN transfer not enabled on the
-  Twilio trunk (see `docs/TWILIO_SETUP.
+  Twilio trunk (see `docs/TWILIO_SETUP.md`). On a Twilio **trial** account you
+  can only call **verified** numbers.
+- **`download-files` errors** — run it once before `dev`; it fetches the
+  turn-detector and VAD models.
+
+---
+
+## 📜 License
+
+MIT — see [`LICENSE`](LICENSE).

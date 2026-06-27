@@ -109,4 +109,18 @@ async def post_call_summary(history_items, booking: Optional[dict] = None) -> st
         temperature=0.2,
         messages=[
             {
-                "role":
+                "role": "system",
+                "content": (
+                    "Summarise the completed phone call for an internal CRM. "
+                    "Use these labelled sections, each one line where possible:\n"
+                    "Caller intent:\nKey details collected:\nOutcome:\n"
+                    "Follow-up needed:\nSentiment:"
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"Transcript:\n{transcript}{booking_note}",
+            },
+        ],
+    )
+    return resp.choices[0].message.content.strip()

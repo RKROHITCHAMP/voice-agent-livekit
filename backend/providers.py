@@ -27,4 +27,21 @@ def build_llm() -> openai.LLM:
     if os.getenv("LLM_PROVIDER", "groq").lower() == "openai":
         return openai.LLM(model=os.getenv("LLM_MODEL", "gpt-4o-mini"))
     return openai.LLM.with_groq(
-        model=os.gete
+        model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
+    )
+
+
+def build_stt() -> deepgram.STT:
+    return deepgram.STT(model=os.getenv("STT_MODEL", "nova-3"), language="multi")
+
+
+def build_tts() -> deepgram.TTS:
+    return deepgram.TTS(model=os.getenv("TTS_VOICE", "aura-2-thalia-en"))
+
+
+def build_vad() -> silero.VAD:
+    return silero.VAD.load()
+
+
+def build_turn_detection() -> MultilingualModel:
+    return MultilingualModel()
