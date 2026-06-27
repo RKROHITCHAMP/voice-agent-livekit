@@ -23,11 +23,13 @@ from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 def build_llm() -> openai.LLM:
     # Default: Groq (free, no card). Groq is OpenAI-API-compatible, so the
-    # LiveKit OpenAI plugin talks to it via `.with_groq()` (reads GROQ_API_KEY).
+    # LiveKit OpenAI plugin at Groq's endpoint via base_url + GROQ_API_KEY.
     if os.getenv("LLM_PROVIDER", "groq").lower() == "openai":
         return openai.LLM(model=os.getenv("LLM_MODEL", "gpt-4o-mini"))
-    return openai.LLM.with_groq(
-        model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
+    return openai.LLM(
+        model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+        api_key=os.getenv("GROQ_API_KEY"),
+        base_url="https://api.groq.com/openai/v1",
     )
 
 
