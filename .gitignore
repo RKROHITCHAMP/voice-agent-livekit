@@ -1,0 +1,37 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+*.db
+*.sqlite3
+appointments.db
+
+# ---- Node / Next.js ----
+node_modules/
+.next/
+out/
+build/
+dist/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+
+# ---- Secrets / env ----
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# ---- Editors / OS ----
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# ---- LiveKit / misc ----
+logs/
+tmp/

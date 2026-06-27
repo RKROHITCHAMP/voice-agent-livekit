@@ -1,0 +1,16 @@
+# LiveKit Agents framework (v1.x) + plugins
+livekit-agents[openai,deepgram,silero,turn-detector]~=1.0
+livekit-api~=1.0
+livekit-protocol~=1.0
+
+# LLM / STT / TTS providers
+openai>=1.30.0
+
+# Backend API for token minting + booking inspection (optional helper)
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.6.0
+aiosqlite>=0.20.0
