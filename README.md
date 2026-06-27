@@ -5,9 +5,9 @@ A voice agent that books appointments over a real-time audio call, can be
 caller to a human over the phone via Twilio — then produces a **post-call
 summary**.
 
-Built with **LiveKit Agents (Python)**, **OpenAI** (LLM), **Deepgram**
-(STT + TTS), **Silero** (VAD), a **Next.js** frontend, and **Twilio** SIP for
-telephony.
+Built with **LiveKit Agents (Python)**, **Groq** (LLM — free, no credit card;
+OpenAI optional), **Deepgram** (STT + TTS), **Silero** (VAD), a **Next.js**
+frontend, and **Twilio** SIP for telephony.
 
 ---
 
@@ -77,7 +77,8 @@ voice-agent-livekit/
 
 - **Python 3.10+** and **Node.js 18+**
 - A **LiveKit Cloud** project (free) — https://cloud.livekit.io
-- An **OpenAI** API key — https://platform.openai.com
+- A **Groq** API key (free, no card) — https://console.groq.com/keys
+  *(or set `LLM_PROVIDER=openai` and use an OpenAI key instead)*
 - A **Deepgram** API key (free credits) — https://console.deepgram.com
 - For warm transfer only: a **Twilio** account (free trial) + the
   [LiveKit CLI](https://docs.livekit.io/home/cli/cli-setup/) (`lk`)
@@ -92,7 +93,8 @@ voice-agent-livekit/
 **LiveKit** → Cloud dashboard → *Settings → Keys*: copy the **WS URL**,
 **API Key**, **API Secret**.
 
-**OpenAI** → *API keys* → create a key.
+**Groq** → https://console.groq.com/keys → *Create API Key* (free, no card).
+*(To use OpenAI instead, set `LLM_PROVIDER=openai` and `OPENAI_API_KEY` in `.env`.)*
 
 **Deepgram** → *API Keys* → create a key.
 
@@ -228,13 +230,4 @@ in the codebase imports a provider directly.
   access and the page must be served over `localhost`/HTTPS.
 - **Transfer fails immediately** — `SIP_OUTBOUND_TRUNK_ID` /
   `HUMAN_AGENT_NUMBER` not set, or SIP REFER/PSTN transfer not enabled on the
-  Twilio trunk (see `docs/TWILIO_SETUP.md`). On a Twilio **trial** account you
-  can only call **verified** numbers.
-- **`download-files` errors** — run it once before `dev`; it fetches the
-  turn-detector and VAD models.
-
----
-
-## 📜 License
-
-MIT — see [`LICENSE`](LICENSE).
+  Twilio trunk (see `docs/TWILIO_SETUP.

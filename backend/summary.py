@@ -19,10 +19,27 @@ _client: Optional[AsyncOpenAI] = None
 
 
 def _get_client() -> AsyncOpenAI:
+    """Async client for the summary LLM.
+
+    Defaults to Groq (free, OpenAI-API-compatible). Set LLM_PROVIDER=openai
+    to use OpenAI instead.
+    """
     global _client
     if _client is None:
-        _client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        if os.getenv("LLM_PROVIDER", "groq").lower() == "openai":
+            _client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        else:
+            _client = AsyncOpenAI(
+                api_key=os.getenv("GROQ_API_KEY"),
+                base_url="https://api.groq.com/openai/v1",
+            )
     return _client
+
+
+def _default_model() -> str:
+    if os.getenv("LLM_PROVIDER", "groq").lower() == "openai":
+        return os.getenv("LLM_MODEL", "gpt-4o-mini")
+    return os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
 
 
 def _transcript_to_text(items) -> str:
@@ -53,7 +70,7 @@ async def spoken_briefing(history_items, reason: str) -> str:
     before handing over the call."""
     transcript = _transcript_to_text(history_items)
     resp = await _get_client().chat.completions.create(
-        model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
+        model=_default_model(),
         temperature=0.3,
         messages=[
             {
@@ -88,22 +105,8 @@ async def post_call_summary(history_items, booking: Optional[dict] = None) -> st
             f"for '{booking.get('reason')}' (callback {booking.get('phone')})."
         )
     resp = await _get_client().chat.completions.create(
-        model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
+        model=_default_model(),
         temperature=0.2,
         messages=[
             {
-                "role": "system",
-                "content": (
-                    "Summarise the completed phone call for an internal CRM. "
-                    "Use these labelled sections, each one line where possible:\n"
-                    "Caller intent:\nKey details collected:\nOutcome:\n"
-                    "Follow-up needed:\nSentiment:"
-                ),
-            },
-            {
-                "role": "user",
-                "content": f"Transcript:\n{transcript}{booking_note}",
-            },
-        ],
-    )
-    return resp.choices[0].message.content.strip()
+                "role":
