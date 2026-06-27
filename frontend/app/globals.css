@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "@livekit/components-styles";
-
 html,
 body {
   background: #0b0f17;
